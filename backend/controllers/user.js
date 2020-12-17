@@ -16,7 +16,7 @@ exports.signup= async (req, res) => {
           });
         }
         return res.send(e);
-      }
+    }
     
 }
 
@@ -33,6 +33,6 @@ exports.signin = async (req, res) => {
        return  res.sendStatus(401);
     }
 
-    const token = jwt.sign({ user: username} , secret);
+    const token = jwt.sign({ user_id: user._id } , secret);
     res.send({ token });
 }
