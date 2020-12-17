@@ -24,7 +24,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
     "nodemon": "^2.0.6",
-    "password-hash": "^1.2.2"
+    "password-hash": "^1.2.2",
+    "uuid-v4": "^0.1.0"
   },
   "devDependencies": {
     "eslint": "^7.15.0",

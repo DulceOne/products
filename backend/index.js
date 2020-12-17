@@ -1,18 +1,19 @@
 const express = require('express');
 
-const { PORT, PREFIX, STORAGEBUCKET } = process.env;
+const { PORT, PREFIX, STORAGE_BUCKET } = process.env;
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const fileUpload = require('express-fileupload');
 const firebase = require('firebase-admin');
-const serviceAccount = require('./firebase.json');
+const serviceAccount = require('./config/serviceAccountFirebase.json');
+
+require('./db');
+require('express-async-errors');
 
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
-  storageBucket: STORAGEBUCKET,
+  storageBucket: STORAGE_BUCKET,
 });
-require('./db');
-require('express-async-errors');
 
 const app = express();
 dotenv.config();
