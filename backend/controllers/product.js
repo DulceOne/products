@@ -2,7 +2,7 @@ const { Types } = require('mongoose');
 const admin = require('firebase-admin');
 const uuid = require('uuid-v4');
 const Product = require('../models/product');
-
+const helpers = require('../shared/helpers');
 const { STORAGE_DOWNLOAD_TOKEN, STORAGE_LINK } = process.env;
 const bucket = admin.storage().bucket();
 // const firestore = admin.firestore;
@@ -40,12 +40,27 @@ exports.create = async (req, res) => {
   return res.status(200).json({ message: 'Product created successfuly' });
 };
 
-exports.read = (req, res) => {
-
+exports.read = async (req, res) => {
+  const { userId } = req.user;
+  const { page, collections, pages, skip } = await helpers.paginator(
+    req.query.page,
+    Product,
+    { owner: Types.ObjectId(userId) },
+  );
+  const products = await Product.find().sort({ $natural: -1 }).skip(skip).limit(10);
+  res.status(200).json({
+    page,
+    collections,
+    pages,
+    skip,
+    products,
+  });
 };
 
-exports.readById = (req, res) => {
-
+exports.readById = async (req, res) => {
+  const { userId } = req.user;
+  const product = await Product.findOne({ owner: Types.ObjectId(userId) });
+  res.status(200).json({ product });
 };
 
 exports.update = (req, res) => {
