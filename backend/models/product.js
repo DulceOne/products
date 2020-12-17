@@ -18,6 +18,7 @@ const ProductSchema = Schema({
     type: Types.ObjectId,
     ref: 'User',
   },
+  image: String,
   views: Number,
 });
 

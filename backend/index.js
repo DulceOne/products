@@ -1,10 +1,17 @@
 const express = require('express');
 
-const port = process.env.PORT;
-const prefix = process.env.PREFIX;
-require('./db');
+const { PORT, PREFIX, STORAGEBUCKET } = process.env;
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const fileUpload = require('express-fileupload');
+const firebase = require('firebase-admin');
+const serviceAccount = require('./firebase.json');
+
+firebase.initializeApp({
+  credential: firebase.credential.cert(serviceAccount),
+  storageBucket: STORAGEBUCKET,
+});
+require('./db');
 require('express-async-errors');
 
 const app = express();
@@ -27,10 +34,14 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-//// ROUTERS ////
-app.use(`${prefix}/user`, require('./routes/user'));
-app.use(`${prefix}/product`, require('./routes/product'));
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: '/tmp/',
+}));
 
-app.listen(port, () => {
-  console.info(`Server started at port: ${port}`);
+app.use(`${PREFIX}/user`, require('./routes/user'));
+app.use(`${PREFIX}/product`, require('./routes/product'));
+
+app.listen(PORT, () => {
+  console.info(`Server started at port: ${PORT}`);
 });
