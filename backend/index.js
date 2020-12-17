@@ -1,7 +1,8 @@
 const express = require('express');
+
 const port = process.env.PORT;
 const prefix = process.env.PREFIX;
-const db = require('./db');
+require('./db');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 require('express-async-errors');
@@ -23,15 +24,13 @@ app.use((err, req, res, next) => {
   res.status(status).json({
     error: err.message,
   });
- next(err)
+  next(err);
 });
-
 
 //// ROUTERS ////
 app.use(`${prefix}/user`, require('./routes/user'));
 app.use(`${prefix}/product`, require('./routes/product'));
 
-
 app.listen(port, () => {
-    console.info(`Server started at port: ${port}`);
+  console.info(`Server started at port: ${port}`);
 });
