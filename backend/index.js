@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const fileUpload = require('express-fileupload');
 const firebase = require('firebase-admin');
+const cors = require('cors');
 const serviceAccount = require('./config/serviceAccountFirebase.json');
 
 require('./db');
@@ -22,10 +23,13 @@ app.use(bodyParser.urlencoded({
   extended: true,
   limit: '50mb',
 }));
+
 app.use(bodyParser.json({
   extended: true,
   limit: '50mb',
 }));
+
+app.use(cors());
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
