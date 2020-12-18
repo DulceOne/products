@@ -1,5 +1,6 @@
 import  * as http from '../../services/http.service';
 import * as storage from '../../services/storage.service';
+import { appMessage } from '../../components/shared/message';
 export const SIGN_IN = 'USER[SIGN_IN]';
 export const SIGN_IN_SUCCESS = 'USER[SIGN_IN_SUCCESS]';
 export const SIGN_IN_FAILURE = 'USER[SIGN_IN_FAILURE ]';
@@ -18,11 +19,12 @@ export const signIn = ({ username, password }) => {
         })
         .then(res => {
           const { token } = res.data;
-          storage.setToken(token)
+          storage.setToken(token);
           dispatch(signInSuccess(token));
         })
         .catch(err => {
           const { message } = err;
+          appMessage(message, 'warn');
           dispatch(signInFailure(message));
         });
     };
