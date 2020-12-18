@@ -1,6 +1,7 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, Layout, Row, Col } from 'antd';
-
+import { Form, Input, Button, Row, Col } from 'antd';
+import { useDispatch } from 'react-redux'
+import { signIn } from '../../../redux/actions/user';
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -15,11 +16,15 @@ const formWrapperStyle = {
 }
 
 const SignInComponent = () => {
-
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+  const onFinish = values => {
+    dispatch(signIn(values));
+  };
   return (
     <Row align="middle" style={formWrapperStyle}>
       <Col span={12} offset={6}>
-        <Form { ...layout } name="basic">
+        <Form { ...layout } name="basic" onFinish={onFinish}>
           <Form.Item
             label="Username"
             name="username"
