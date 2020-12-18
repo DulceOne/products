@@ -32,6 +32,6 @@ exports.signin = async (req, res) => {
     return res.sendStatus(401);
   }
 
-  const token = jwt.sign({ user_id: user._id }, secret);
+  const token = jwt.sign({ userId: user._id }, secret);
   return res.send({ token });
 };

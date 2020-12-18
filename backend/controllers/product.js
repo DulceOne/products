@@ -59,7 +59,11 @@ exports.read = async (req, res) => {
 
 exports.readById = async (req, res) => {
   const { userId } = req.user;
-  const product = await Product.findOne({ owner: Types.ObjectId(userId) });
+  const { id } = req.params;
+  const product = await Product.findOne({
+    owner: Types.ObjectId(userId),
+    _id: id,
+  });
   res.status(200).json({ product });
 };
 
