@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, Layout, Row, Col } from 'antd';
-
+import { Form, Input, Button, Row, Col } from 'antd';
+import * as hadlers from './handlers';
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -14,10 +14,13 @@ const formWrapperStyle = {
   height: "100%"
 }
 const SignUpComponent = () => {
+  const onFinish = (form) => {
+    hadlers.signup(form);
+  }
     return (
         <Row align="middle" style={formWrapperStyle}>
           <Col span={12} offset={6}>
-            <Form { ...layout } name="basic">
+            <Form { ...layout } name="basic" onFinish={onFinish}>
               <Form.Item
                 label="Username"
                 name="username"

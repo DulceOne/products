@@ -1,3 +1,4 @@
+import history from '../../../utils/history';
 const Products = () => {
   const products = [
     {
@@ -17,6 +18,10 @@ const Products = () => {
     },
   ];
 
+  const goTo = () => {
+    history.push('/products/1')
+  }
+
   return (
     products.map((product) => {
       return (
@@ -24,6 +29,7 @@ const Products = () => {
           <div>{product.name}</div>
           <div>{product.price}</div>
           <div>{product.date}</div>
+          <button onClick={goTo}></button>
         </div>
       )
     })
