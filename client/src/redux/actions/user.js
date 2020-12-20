@@ -15,15 +15,15 @@ export const signIn = ({ username, password }) => {
         .post(`/user/signin`, {
             username,
             password,
-          completed: false
+            completed: false
         })
-        .then(res => {
-          const { token } = res.data;
+        .then(result => {
+          const { token } = result.data;
           storage.setToken(token);
           dispatch(signInSuccess(token));
         })
-        .catch(err => {
-          const { message } = err;
+        .catch(error => {
+          const { message } = error;
           appMessage(message, 'warn');
           dispatch(signInFailure(message));
         });
