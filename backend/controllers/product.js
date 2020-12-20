@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
     name,
     price,
     owner: Types.ObjectId(userId),
-    date: helpers.formatDate(),
+    date: helpers.formatDate(new Date()),
   };
 
   if (!req.files) {
@@ -71,6 +71,10 @@ exports.update = (req, res) => {
 
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
+  const { id } = req.params;
 
+  await Product.remove({ _id: id });
+  //TODO remove image in firebase
+  res.status(200).json({ message: 'Product is removed' });
 };
