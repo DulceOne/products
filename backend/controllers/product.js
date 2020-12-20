@@ -6,7 +6,6 @@ const helpers = require('../shared/helpers');
 
 const { STORAGE_DOWNLOAD_TOKEN, STORAGE_LINK } = process.env;
 const bucket = admin.storage().bucket();
-// const firestore = admin.firestore;
 
 exports.create = async (req, res) => {
   const { name, price } = req.body;
@@ -16,7 +15,7 @@ exports.create = async (req, res) => {
     name,
     price,
     owner: Types.ObjectId(userId),
-    dete: new Date(), // TODO need using moment js or move to helpers and conver in a valid value
+    date: helpers.formatDate(),
   };
 
   if (!req.files) {
