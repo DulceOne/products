@@ -1,5 +1,5 @@
 import history from '../../../utils/history';
-import { Table, Image, Button, Row, Empty, Switch, Card, Col, Popconfirm } from 'antd';
+import { Table, Image, Button, Row, Empty, Switch, Card, Col, PageHeader, Radio } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { productFetch, productDelete } from '../../../redux/actions/product';
@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const Products = () => {
   const [productState, setProducts] = useState([]);
-  const [outputModeStat, setOutputMode] = useState(true);
+  const [templateOption, setTemplateOption] = useState(true);
   const { products, pagination } = useSelector(state => state.product);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -93,25 +93,42 @@ const Products = () => {
   }
 
   const toggleOutputMode = (event) => {
-    setOutputMode(event);
+    setTemplateOption(event.target.value);
   }
+
+  const templateOptions = [
+    { label: 'Table', value: true },
+    { label: 'Card', value: false },
+  ];
 
   return (
     <>
-    <Row>
-      <Link to="/products/create">
+
+    
+  <PageHeader
+      ghost={false}
+      onBack={() => window.history.back()}
+      title="Product list"
+      extra={[
+        <Link to="/products/create">
         <Button type="primary">
           New product 
         </Button>
-      </Link>
-      <span>Card</span>
-      <Switch defaultChecked onChange={toggleOutputMode} />
-      <span>Table</span>
-    </Row>
+      </Link>,
+        <Radio.Group
+          options={templateOptions}
+          onChange={toggleOutputMode}
+          value={templateOption}
+          optionType="button"
+          buttonStyle="solid"
+        />
+      ]}
+    >
+    </PageHeader>
 
     { 
-      (products.length && outputModeStat) &&
-        <Row>
+      (products.length && templateOption) &&
+        <Row style={{marginTop: "30px"}}>
           <Table
             style={tableStyle}
             columns={columns}
@@ -121,8 +138,8 @@ const Products = () => {
     }
 
     {
-      (products.length && !outputModeStat) &&
-        <Row gutter={[24, 24]}>
+      (products.length && !templateOption) &&
+        <Row gutter={[24, 24]} style={{marginTop: "18px"}}>
           {
             products.map((product, index) => {
               return (
@@ -138,8 +155,8 @@ const Products = () => {
                       />
                     }
                     actions={[
-                      <EditOutlined key="edit" />,
-                      <DeleteOutlined key="delete" />,
+                      <EditOutlined key="edit" onClick={() => goTo(product._id)} />,
+                      <DeleteOutlined key="delete" onClick={() => onDelete(product._id)} />,
                     ]}
                   >
                     <Card.Meta

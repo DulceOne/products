@@ -1,4 +1,4 @@
-import { Form, Input, Button, Upload } from 'antd';
+import { Form, Input, Button, Upload, PageHeader } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react';
@@ -21,10 +21,17 @@ const ProductCreateComponent = () => {
 
 	return (
 		<>
+			<PageHeader
+				ghost={false}
+				onBack={() => window.history.back()}
+				title="Product create"
+			>
+			</PageHeader>
 			<Form
 				form={form}
 				onFinish={onCreate}
 				initialValues={formState}
+				style={{marginTop: "30px"}}
 			>
 				<Form.Item label="Name" name="name"
 				 rules={[
@@ -40,6 +47,7 @@ const ProductCreateComponent = () => {
 				 rules={[
 					{
 					  required: true,
+					  pattern: /^[0-9]/,
 					  message: 'Please input your price!',
 					},
 				  ]}  
