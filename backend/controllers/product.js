@@ -1,6 +1,5 @@
 const { Types } = require('mongoose');
 const admin = require('firebase-admin');
-const functions = require('firebase-functions');
 const uuid = require('uuid-v4');
 const Product = require('../models/product');
 const helpers = require('../shared/helpers');
@@ -11,7 +10,6 @@ const bucket = admin.storage().bucket();
 exports.create = async (req, res) => {
   const { name, price } = req.body;
   const { userId } = req.user;
-
   const product = {
     name,
     price,
@@ -27,16 +25,7 @@ exports.create = async (req, res) => {
   const { image } = req.files;
   const path = uuid() + image.name;
   product.image = path;
-
-  await bucket.upload(image.tempFilePath, {
-    destination: path,
-    metadata: {
-      contentType: image.mimetype,
-      metadata: {
-        firebaseStorageDownloadTokens: STORAGE_DOWNLOAD_TOKEN,
-      },
-    },
-  });
+  helpers.bucketUpload(image, path);
   await Product(product).save();
   return res.status(200).json({ message: 'Product created successfuly' });
 };
@@ -73,14 +62,38 @@ exports.readById = async (req, res) => {
   res.status(200).json({ product });
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
+  const { name, price, id } = req.body;
+  const { userId } = req.user;
+  const product = await Product.findOne({
+    owner: Types.ObjectId(userId),
+    _id: id,
+  });
 
+  product.name = name;
+  product.price = price;
+
+  if (req.files && product.image) {
+    const { image } = req.files;
+    await bucket.file(product.image).delete();
+    const path = uuid() + image.name;
+    helpers.bucketUpload(image, path);
+    product.image = path;
+  }
+  await product.save();
+  res.status(200).json({ message: 'Product is updated' });
 };
 
 exports.delete = async (req, res) => {
   const { id } = req.params;
-  const product = await Product.findOne({ _id: id });
-  await bucket.file(product.image).delete();
+  const { userId } = req.user;
+  const product = await Product.findOne({
+    owner: Types.ObjectId(userId),
+    _id: id,
+  });
+  if (product.image) {
+    await bucket.file(product.image).delete();
+  }
   await product.remove();
   res.status(200).json({ message: 'Product is removed' });
 };

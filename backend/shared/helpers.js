@@ -1,3 +1,8 @@
+const admin = require('firebase-admin');
+
+const bucket = admin.storage().bucket();
+const { STORAGE_DOWNLOAD_TOKEN } = process.env;
+
 exports.paginator = async (page, model, options) => {
   const collections = await model.countDocuments(options);
   let pages = collections / 10;
@@ -22,4 +27,16 @@ exports.formatDate = (date) => {
     day = `0${+day}`;
   }
   return [year, month, day].join('-');
+};
+
+exports.bucketUpload = async (image, path) => {
+  await bucket.upload(image.tempFilePath, {
+    destination: path,
+    metadata: {
+      contentType: image.mimetype,
+      metadata: {
+        firebaseStorageDownloadTokens: STORAGE_DOWNLOAD_TOKEN,
+      },
+    },
+  });
 };
