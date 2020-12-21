@@ -89,7 +89,8 @@ const Products = () => {
   }
 
   const emptyStyle = {
-    marginTop: "20%"
+    margin: "auto",
+    marginTop: 200
   }
 
   const toggleOutputMode = (event) => {
@@ -151,7 +152,7 @@ const Products = () => {
                       <img
                         alt="example"
                         src={product.image}
-                        style={{ height:200, objectFit: 'fit-content' }}
+                        style={{ height:200, objectFit: 'cover' }}
                       />
                     }
                     actions={[

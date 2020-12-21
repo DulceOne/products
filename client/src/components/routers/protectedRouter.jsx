@@ -5,7 +5,7 @@ import {
 import RedirectRoute from './redirectRouter';
 import history from '../../utils/history';
 import ProductsComponent from '../pages/products';
-import ProductComponent from '../pages/products/components/product_view';
+import ProductComponent from '../pages/products/components/product_edit';
 import ProductCreateComponent from '../pages/products/components/product_create';
 import { Layout, Row, Col } from 'antd';
 import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
