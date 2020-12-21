@@ -15,7 +15,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const layoutStyle = {
   height: "100%"
 }
-
+const { REACT_APP_NAME: appName } = process.env;
 const ProtectedRouter = () => (
 
 <Router history={history}>
@@ -24,11 +24,7 @@ const ProtectedRouter = () => (
       breakpoint="lg"
       collapsedWidth="0"
     >
-    <div style={{
-      height: "32px",
-      background: "white",
-      margin: "16px",
-    }} />
+    <div style={{fontSize: 24, color: "white", padding: 13}}>{appName}</div>
     <MenuComponent />
     </Sider>
     <Layout>

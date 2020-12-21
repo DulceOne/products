@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as storage from '../services/storage.service';
-const baseUrl = 'http://localhost:9000/api/v1';
+const { REACT_APP_API_URL: baseUrl } = process.env;
+
 const getOptions = () => {
     return  {
         headers: {
@@ -9,8 +10,6 @@ const getOptions = () => {
         }
     }
 }
-
-
 
 export const get = (url) => {
     return new Promise((resolve, reject) => {
