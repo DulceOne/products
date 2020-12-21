@@ -1,5 +1,6 @@
 const { Types } = require('mongoose');
 const admin = require('firebase-admin');
+const functions = require('firebase-functions');
 const uuid = require('uuid-v4');
 const Product = require('../models/product');
 const helpers = require('../shared/helpers');
@@ -25,7 +26,7 @@ exports.create = async (req, res) => {
 
   const { image } = req.files;
   const path = uuid() + image.name;
-  product.image = `${STORAGE_LINK}${path}?alt=media&token=${STORAGE_DOWNLOAD_TOKEN}`;
+  product.image = path;
 
   await bucket.upload(image.tempFilePath, {
     destination: path,
@@ -47,7 +48,12 @@ exports.read = async (req, res) => {
     Product,
     { owner: Types.ObjectId(userId) },
   );
-  const products = await Product.find().sort({ $natural: -1 }).skip(skip).limit(10);
+  const products = await Product.find().sort({ $natural: -1 }).skip(skip).limit(10)
+    .lean();
+  products.map((product) => {
+    product.image = `${STORAGE_LINK}${product.image}?alt=media&token=${STORAGE_DOWNLOAD_TOKEN}`;
+    return product;
+  });
   res.status(200).json({
     page,
     collections,
@@ -73,8 +79,8 @@ exports.update = (req, res) => {
 
 exports.delete = async (req, res) => {
   const { id } = req.params;
-
-  await Product.remove({ _id: id });
-  //TODO remove image in firebase
+  const product = await Product.findOne({ _id: id });
+  await bucket.file(product.image).delete();
+  await product.remove();
   res.status(200).json({ message: 'Product is removed' });
 };
