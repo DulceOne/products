@@ -5,9 +5,11 @@ const getOptions = () => {
     return  {
         headers: {
             ['x-access-token']: storage.getToken(),
+            ['Content-Type']:'multipart/form-data'
         }
     }
 }
+
 
 
 export const get = (url) => {
@@ -21,6 +23,14 @@ export const get = (url) => {
 export const post = (url, body) => {
     return new Promise((resolve, reject) => {
         axios.post(baseUrl + url, body, getOptions())
+        .then(resolve)
+        .catch(reject)
+    })
+}
+
+export const remove = (url) => {
+    return new Promise((resolve, reject) => {
+        axios.delete(baseUrl + url, getOptions())
         .then(resolve)
         .catch(reject)
     })
