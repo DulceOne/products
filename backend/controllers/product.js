@@ -25,7 +25,7 @@ exports.create = async (req, res) => {
   const { image } = req.files;
   const path = uuid() + image.name;
   product.image = path;
-  helpers.bucketUpload(image, path);
+  await helpers.bucketUpload(image, path);
   await Product(product).save();
   return res.status(200).json({ message: 'Product created successfuly' });
 };
@@ -53,31 +53,21 @@ exports.read = async (req, res) => {
 };
 
 exports.readById = async (req, res) => {
-  const { userId } = req.user;
-  const { id } = req.params;
-  const product = await Product.findOne({
-    owner: Types.ObjectId(userId),
-    _id: id,
-  });
+  const product = await helpers.getProduct(req);
   res.status(200).json({ product });
 };
 
 exports.update = async (req, res) => {
-  const { name, price, id } = req.body;
-  const { userId } = req.user;
-  const product = await Product.findOne({
-    owner: Types.ObjectId(userId),
-    _id: id,
-  });
-
+  const { name, price } = req.body;
+  const product = await helpers.getProduct(req);
   product.name = name;
   product.price = price;
 
   if (req.files && product.image) {
     const { image } = req.files;
-    await bucket.file(product.image).delete();
     const path = uuid() + image.name;
-    helpers.bucketUpload(image, path);
+    await bucket.file(product.image).delete();
+    await helpers.bucketUpload(image, path);
     product.image = path;
   }
   await product.save();
@@ -85,12 +75,7 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const { id } = req.params;
-  const { userId } = req.user;
-  const product = await Product.findOne({
-    owner: Types.ObjectId(userId),
-    _id: id,
-  });
+  const product = await helpers.getProduct(req);
   if (product.image) {
     await bucket.file(product.image).delete();
   }

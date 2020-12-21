@@ -1,4 +1,6 @@
 const admin = require('firebase-admin');
+const { Types } = require('mongoose');
+const Product = require('../models/product');
 
 const bucket = admin.storage().bucket();
 const { STORAGE_DOWNLOAD_TOKEN } = process.env;
@@ -39,4 +41,14 @@ exports.bucketUpload = async (image, path) => {
       },
     },
   });
+};
+
+exports.getProduct = async (req) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+  const product = await Product.findOne({
+    owner: Types.ObjectId(userId),
+    _id: id,
+  });
+  return product;
 };
