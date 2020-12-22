@@ -54,6 +54,7 @@ exports.read = async (req, res) => {
 
 exports.readById = async (req, res) => {
   const product = await helpers.getProduct(req);
+  product.image = product.image = `${STORAGE_LINK}${product.image}?alt=media&token=${STORAGE_DOWNLOAD_TOKEN}`;
   res.status(200).json({ product });
 };
 
