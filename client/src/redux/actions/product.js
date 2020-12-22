@@ -13,6 +13,11 @@ export const PRODUCT_DELETE = 'PRODUCT[PRODUCT_DELETE]';
 export const PRODUCT_DELETE_FAILURE = 'PRODUCT[PRODUCT_DELETE_FAILURE]';
 export const PRODUCT_DELETE_SUCCESS = 'PRODUCT[PRODUCT_DELETE_SUCCESS]';
 
+export const PRODUCT_GET_BY_ID = 'PRODUCT[PRODUCT_GET_BY_ID]';
+export const PRODUCT_GET_BY_ID_FAILURE = 'PRODUCT[PRODUCT_GET_BY_ID_FAILURE]';
+export const PRODUCT_GET_BY_ID_SUCCESS = 'PRODUCT[PRODUCT_GET_BY_ID_SUCCESS]';
+
+
 export const productFetch = () => {
     return dispatch => {
         dispatch(productFetchStarted());
@@ -102,3 +107,33 @@ const productDeletFailure = (error) => ({
 const productDeletSuccess = () => ({
     type: PRODUCT_DELETE_SUCCESS
 });
+
+export const productGetById = (id) => {
+    return dispatch => {
+        dispatch(productGetByIdStarted());
+        http.get(`/product/${id}`)
+        .then(result => {
+            const { product } = result.data;
+            dispatch(productGetByIdSuccess(product));
+        })
+        .catch(error => {
+            const { message } = error;
+            appMessage(message, 'warn');
+            dispatch(productGetByIdFailure(message));
+        })
+    }
+}
+
+const productGetByIdStarted = () => ({
+    type: PRODUCT_GET_BY_ID
+});
+
+const productGetByIdSuccess = (product) => ({
+    type: PRODUCT_GET_BY_ID_SUCCESS,
+    payload: product
+})
+
+const productGetByIdFailure = (error) => ({
+    type: PRODUCT_GET_BY_ID_FAILURE,
+    payload: error
+})

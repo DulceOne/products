@@ -7,14 +7,14 @@ import { EditOutlined, DeleteOutlined  } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 const Products = () => {
-  const [productState, setProducts] = useState([]);
   const [templateOption, setTemplateOption] = useState(true);
   const { products, pagination } = useSelector(state => state.product);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(productFetch());
-    setProducts(products);
-  }, products)
+  }, [])
+
 
   const columns = [
     {
