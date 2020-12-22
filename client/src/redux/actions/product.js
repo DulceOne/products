@@ -18,6 +18,10 @@ export const PRODUCT_GET_BY_ID_FAILURE = 'PRODUCT[PRODUCT_GET_BY_ID_FAILURE]';
 export const PRODUCT_GET_BY_ID_SUCCESS = 'PRODUCT[PRODUCT_GET_BY_ID_SUCCESS]';
 
 
+export const PRODUCT_EDIT= 'PRODUCT[PRODUCT_EDIT]';
+export const PRODUCT_EDIT_FAILURE = 'PRODUCT[PRODUCT_EDIT_FAILURE]';
+export const PRODUCT_EDIT_SUCCESS = 'PRODUCT[PRODUCT_EDIT_SUCCESS]';
+
 export const productFetch = () => {
     return dispatch => {
         dispatch(productFetchStarted());
@@ -136,4 +140,37 @@ const productGetByIdSuccess = (product) => ({
 const productGetByIdFailure = (error) => ({
     type: PRODUCT_GET_BY_ID_FAILURE,
     payload: error
+})
+
+export const productEdit = (product, id) => {
+    return dispatch => {
+        dispatch(productEditStart(product));
+        http.patch(`/product/${id}`, product)
+        .then(result => {
+            const { message } = result.data;
+            appMessage(message, 'success');
+            dispatch(productEditSuccess());
+        })
+        .catch(error => {
+            const { message } = error;
+            appMessage(message, 'warn');
+            dispatch(productEditFailure(message));
+        })
+    }
+}
+
+
+const productEditStart = (product) => ({
+    type: PRODUCT_EDIT,
+    payload: product
+})
+
+const productEditFailure = (error) => ({
+    type: PRODUCT_EDIT_FAILURE,
+    payload: error
+})
+
+const productEditSuccess = (product) => ({
+    type: PRODUCT_EDIT_SUCCESS,
+    payload: product
 })

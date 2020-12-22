@@ -34,3 +34,11 @@ export const remove = (url) => {
         .catch(reject)
     })
 }
+
+export const patch = (url, body) => {
+    return new Promise((resolve, reject) => {
+        axios.patch(baseUrl + url, body, getOptions())
+        .then(resolve)
+        .catch(reject)
+    })
+}

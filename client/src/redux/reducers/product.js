@@ -4,7 +4,10 @@ import {
     PRODUCTS_FETCH_FAILURE,
     PRODUCT_GET_BY_ID,
     PRODUCT_GET_BY_ID_FAILURE,
-    PRODUCT_GET_BY_ID_SUCCESS
+    PRODUCT_GET_BY_ID_SUCCESS,
+    PRODUCT_EDIT,
+    PRODUCT_EDIT_FAILURE,
+    PRODUCT_EDIT_SUCCESS
   } from '../actions/product';
 const initialState = {
     products: [],
@@ -49,15 +52,34 @@ const productReducer = (state = initialState, action) => {
         case PRODUCT_GET_BY_ID_FAILURE:
             return {
                 ...state,
-                loading: true,
+                loading: false,
                 error: action.payload,
             }
 
         case PRODUCT_GET_BY_ID_SUCCESS:
             return {
                 ...state,
-                loading: true,
+                loading: false,
                 product: action.payload,
+            }
+
+            case PRODUCT_EDIT:
+            return {
+                ...state,
+                loading: true,
+            }
+
+        case PRODUCT_EDIT_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            }
+
+        case PRODUCT_EDIT_SUCCESS:
+            return {
+                ...state,
+                loading: false,
             }
         default:
             return state;

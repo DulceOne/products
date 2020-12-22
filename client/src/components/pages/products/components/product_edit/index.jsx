@@ -2,7 +2,7 @@ import { Form, Input, Button, Upload, PageHeader, message, Row, Image } from 'an
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react';
-import { productGetById } from '../../../../../redux/actions/product';
+import { productGetById, productEdit } from '../../../../../redux/actions/product';
 
 const ProductEditComponent = (props) => {
 
@@ -16,7 +16,8 @@ const ProductEditComponent = (props) => {
   }, [])
 
   useEffect(() => {
-    form.setFieldsValue(product);
+    console.log(product)
+    form.setFieldsValue({name: product.name, price: product.price});
     setImage(product.image);
   }, [product])
 
@@ -46,7 +47,13 @@ function getBase64(img, callback) {
     }
 
     const onUpdate = (value) => {
-        console.log(value)
+        const body = new FormData();
+		body.append('name', value.name);
+        body.append('price', value.price);
+		if(value.image) {
+			body.append('image', value.image.fileList[0].originFileObj);
+		}
+        dispatch(productEdit(body, product._id));
     }
 
   return (
