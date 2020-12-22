@@ -40,7 +40,9 @@ exports.read = async (req, res) => {
   const products = await Product.find().sort({ $natural: -1 }).skip(skip).limit(10)
     .lean();
   products.map((product) => {
-    product.image = `${STORAGE_LINK}${product.image}?alt=media&token=${STORAGE_DOWNLOAD_TOKEN}`;
+    if (product.image) {
+      product.image = `${STORAGE_LINK}${product.image}?alt=media&token=${STORAGE_DOWNLOAD_TOKEN}`;
+    }
     return product;
   });
   res.status(200).json({
@@ -54,7 +56,9 @@ exports.read = async (req, res) => {
 
 exports.readById = async (req, res) => {
   const product = await helpers.getProduct(req);
-  product.image = product.image = `${STORAGE_LINK}${product.image}?alt=media&token=${STORAGE_DOWNLOAD_TOKEN}`;
+  if (product.image) {
+    product.image = product.image = `${STORAGE_LINK}${product.image}?alt=media&token=${STORAGE_DOWNLOAD_TOKEN}`;
+  }
   res.status(200).json({ product });
 };
 
