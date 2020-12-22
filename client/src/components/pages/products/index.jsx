@@ -22,13 +22,11 @@ const Products = () => {
       dataIndex: "image",
       key: 'image',
       render: (text, record) =>  {
-        const src = record.image || 'error';
         return (
           <Image
           width={75}
           height={75}
-          src={src}
-          fallback="https://img.icons8.com/pastel-glyph/344/image--v2.png"
+          src={isImage(record.image)}
         />
         )
       }
@@ -97,6 +95,11 @@ const Products = () => {
     setTemplateOption(event.target.value);
   }
 
+  const isImage = (image) => {
+    const fallback="https://img.icons8.com/pastel-glyph/344/image--v2.png";
+    return image ? image : fallback;
+  }
+
   const templateOptions = [
     { label: 'Table', value: true },
     { label: 'Card', value: false },
@@ -151,7 +154,7 @@ const Products = () => {
                     cover={
                       <img
                         alt="example"
-                        src={product.image}
+                        src={isImage(product.image)}
                         style={{ height:200, objectFit: 'cover' }}
                       />
                     }

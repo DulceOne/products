@@ -22,6 +22,8 @@ export const PRODUCT_EDIT= 'PRODUCT[PRODUCT_EDIT]';
 export const PRODUCT_EDIT_FAILURE = 'PRODUCT[PRODUCT_EDIT_FAILURE]';
 export const PRODUCT_EDIT_SUCCESS = 'PRODUCT[PRODUCT_EDIT_SUCCESS]';
 
+
+// PRODUCT FETCH BLOCK
 export const productFetch = () => {
     return dispatch => {
         dispatch(productFetchStarted());
@@ -50,6 +52,7 @@ const productFetchSuccess = (products) => ({
 });
 
 
+//PRODUCT ADD BLOCK
 export const productAdd = (product) => {
     return dispatch => {
         dispatch(productAddStarted());
@@ -80,7 +83,7 @@ const productAddSuccess = () => ({
     type: PRODUCT_ADD_SUCCESS
 });
 
-
+//PRODUCT DELETE BLOCK
 export const productDelete = (id) => {
     return dispatch => {
         dispatch(productDeleteStarted());
@@ -112,6 +115,7 @@ const productDeletSuccess = () => ({
     type: PRODUCT_DELETE_SUCCESS
 });
 
+//PRODUCT GET BLOCK
 export const productGetById = (id) => {
     return dispatch => {
         dispatch(productGetByIdStarted());
@@ -142,6 +146,7 @@ const productGetByIdFailure = (error) => ({
     payload: error
 })
 
+//PRODUCT EDIT BLOCK
 export const productEdit = (product, id) => {
     return dispatch => {
         dispatch(productEditStart(product));
