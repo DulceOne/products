@@ -37,7 +37,10 @@ exports.read = async (req, res) => {
     Product,
     { owner: Types.ObjectId(userId) },
   );
-  const products = await Product.find().sort({ $natural: -1 }).skip(skip).limit(10)
+  const products = await Product
+    .find({ owner: Types.ObjectId(userId) })
+    // .sort({ $natural: -1 })
+    .skip(skip).limit(10)
     .lean();
   products.map((product) => {
     if (product.image) {
@@ -86,4 +89,23 @@ exports.delete = async (req, res) => {
   }
   await product.remove();
   res.status(200).json({ message: 'Product is removed' });
+};
+
+exports.createTestItem = async (req, res) => {
+  const products = await Product.find();
+  const { userId } = req.user;
+  const arr = [];
+  for (let i = 0; i < 50; i++) {
+    arr.push({
+      name: `Test item ${i}`,
+      price: 500,
+      image: '9abb7711-e190-433b-b928-1a9a810c218577de807f-8978-4950-bc30-d59df1c3caae.jpg',
+      owner: userId,
+    });
+  }
+  await Product.insertMany(arr);
+  for (let i = 0; i < 50; i++) {
+    Product(products[0]).save();
+  }
+  res.status(200).json({ message: 'Products is duplicated' });
 };
