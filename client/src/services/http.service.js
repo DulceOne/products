@@ -6,7 +6,6 @@ const getOptions = () => {
     return  {
         headers: {
             ['x-access-token']: storage.getToken(),
-            ['Content-Type']:'multipart/form-data'
         }
     }
 }

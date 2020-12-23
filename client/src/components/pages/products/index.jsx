@@ -1,18 +1,21 @@
 import history from '../../../utils/history';
-import { Table, Image, Button, Row, Empty, Switch, Card, Col, PageHeader, Radio } from 'antd';
+import { Table, Image, Button, Row, Empty, Card, Col, PageHeader, Radio, Pagination } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { productFetch, productDelete } from '../../../redux/actions/product';
 import { EditOutlined, DeleteOutlined  } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-
-const Products = () => {
+import { Link, useRouteMatch  } from 'react-router-dom';
+import queryString from 'query-string';
+const Products = (props) => {
   const [templateOption, setTemplateOption] = useState(true);
   const { products, pagination } = useSelector(state => state.product);
+  const [ page, setPage ] = useState(1);
   const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(productFetch());
+    const { search } = props.location;
+    const { page } = queryString.parse(search);
+    setPage(page || 1);
+    dispatch(productFetch(page || 1));
   }, [])
 
 
@@ -100,6 +103,11 @@ const Products = () => {
     return image ? image : fallback;
   }
 
+  const onPaginate = (page) => {
+    dispatch(productFetch(page));
+    history.push(`?page=${page}`);
+  }
+
   const templateOptions = [
     { label: 'Table', value: true },
     { label: 'Card', value: false },
@@ -131,18 +139,19 @@ const Products = () => {
     </PageHeader>
 
     { 
-      (products.length && templateOption) &&
+      (products.length > 0 && templateOption) &&
         <Row style={{marginTop: "30px"}}>
           <Table
             style={tableStyle}
             columns={columns}
             dataSource={products}
+            pagination={false}
           />
         </Row>
     }
 
     {
-      (products.length && !templateOption) &&
+      (products.length > 0 && !templateOption) &&
         <Row gutter={[24, 24]} style={{marginTop: "18px"}}>
           {
             products.map((product, index) => {
@@ -181,6 +190,16 @@ const Products = () => {
         <Row>
           <Empty style={emptyStyle} />
         </Row>
+    }
+
+    {
+      products.length > 0 &&
+      <Pagination
+        onChange={onPaginate} 
+        defaultCurrent={page}
+        style={{marginTop: 30}}
+        total={pagination.collections}
+      />
     }
     </>
   )

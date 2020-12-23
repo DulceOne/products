@@ -15,7 +15,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const layoutStyle = {
   height: "100%"
 }
-const { REACT_APP_NAME: appName } = process.env;
+const { REACT_APP_NAME: appName, FOOTER_CONTENT: footerContent } = process.env;
 const ProtectedRouter = () => (
 
 <Router history={history}>
@@ -40,7 +40,7 @@ const ProtectedRouter = () => (
           </Switch>
           </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: 'center' }}>{footerContent}</Footer>
     </Layout>
   </Layout>
 </Router>

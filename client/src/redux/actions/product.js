@@ -24,10 +24,10 @@ export const PRODUCT_EDIT_SUCCESS = 'PRODUCT[PRODUCT_EDIT_SUCCESS]';
 
 
 // PRODUCT FETCH BLOCK
-export const productFetch = () => {
+export const productFetch = (page) => {
     return dispatch => {
         dispatch(productFetchStarted());
-        http.get('/product')
+        http.get(`/product?page=${page}`)
         .then(result => dispatch(productFetchSuccess(result.data)))
         .catch(error => {
             const { message } = error;

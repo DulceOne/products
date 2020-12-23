@@ -8,7 +8,7 @@ export const  MenuComponent = () => {
     return (
         <Menu
           defaultOpenKeys={['sub1']}
-          style={{ height: "100vh" }}
+          style={{ height: "calc(100% - 60px)" }}
           mode="inline"
         >
           <SubMenu key="sub1" icon={<MailOutlined />} title="Products">
