@@ -5,7 +5,7 @@ export const SIGN_IN = 'USER[SIGN_IN]';
 export const SIGN_IN_SUCCESS = 'USER[SIGN_IN_SUCCESS]';
 export const SIGN_IN_FAILURE = 'USER[SIGN_IN_FAILURE ]';
 export const SIGN_UP = 'USER[SIGN_UP]';
-
+export const SIGN_OUT = 'USER[SIGN_OUT]';
 
 export const signIn = ({ username, password }) => {
     return dispatch => {
@@ -44,4 +44,9 @@ export const signIn = ({ username, password }) => {
     type: SIGN_IN_FAILURE,
     payload: error
   });
+
+ export const signOut = () => {
+  storage.setToken("");
+  return {type: SIGN_OUT}
+ }
   

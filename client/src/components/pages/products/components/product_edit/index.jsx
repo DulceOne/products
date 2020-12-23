@@ -3,6 +3,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useState, useEffect } from 'react';
 import { productGetById, productEdit } from '../../../../../redux/actions/product';
+import { useMediaQuery } from 'react-responsive'
 
 const ProductEditComponent = (props) => {
 
@@ -10,6 +11,8 @@ const ProductEditComponent = (props) => {
   const dispatch = useDispatch();
   const { product } = useSelector(state => state.product);
   const [image, setImage] = useState('');
+  const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
+
   useEffect(() => {
     const { productId } = props.match.params;
     dispatch(productGetById(productId));
@@ -98,13 +101,21 @@ function getBase64(img, callback) {
                     <Button icon={<UploadOutlined />}>Select File</Button>
                 </Upload>
             </Form.Item>
+            <Image
+                width={200}
+                src={image}
+                style={{display: isDesktopOrLaptop ? "none" : "block"}}
+            />
             <Form.Item>
-                <Button type="primary" htmlType="submit">Submit</Button>
+                <Button type="primary" htmlType="submit" style={{marginTop: isDesktopOrLaptop ? 0 : 20}}>
+                  Submit
+                </Button>
             </Form.Item>
             </Form>
             <Image
                 width={200}
                 src={image}
+                style={{display: isDesktopOrLaptop ? "block" : "none"}}
             />
         </Row>
       </>

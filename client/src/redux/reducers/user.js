@@ -2,6 +2,7 @@ import {
     SIGN_IN,
     SIGN_IN_SUCCESS,
     SIGN_IN_FAILURE,
+    SIGN_OUT
   } from '../actions/user';
 import * as storage from '../../services/storage.service';
 const initialState = {
@@ -29,6 +30,12 @@ const userReducer = (state = initialState, action) => {
                 loading: false,
                 token: action.payload,
                 error: '',
+            }
+
+        case SIGN_OUT:
+            return {
+                ...state,
+                token: ''
             }
         default:
             return state;

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { productFetch, productDelete } from '../../../redux/actions/product';
 import { EditOutlined, DeleteOutlined  } from '@ant-design/icons';
-import { Link, useRouteMatch  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive'
 import queryString from 'query-string';
 
@@ -22,14 +22,6 @@ const Products = (props) => {
     setTemplateOption(isDesktopOrLaptop)
     dispatch(productFetch(page || 1));
   }, [])
-
-  const mobileProductsRowStyle = {
-    margin: "18px -12px 12px",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  }
-
 
   const columns = [
     {
@@ -146,6 +138,8 @@ const Products = (props) => {
           value={templateOption}
           optionType="button"
           buttonStyle="solid"
+          style={{display: isDesktopOrLaptop ? "inline" : "none"}}
+
         />
       ]}
     >
@@ -169,10 +163,10 @@ const Products = (props) => {
           {
             products.map((product, index) => {
               return (
-                <Col  span={6}>
+                <Col  span={isDesktopOrLaptop ? 6 : 24}>
                   <Card 
-                    span={6}
-                    style={{ width: 275 }}
+                    span={isDesktopOrLaptop ? 6 : 24}
+                    style={{ width: isDesktopOrLaptop ? 275 : "100%" }}
                     cover={
                       <img
                         alt="example"
