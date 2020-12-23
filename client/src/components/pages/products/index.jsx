@@ -5,18 +5,30 @@ import { useDispatch, useSelector } from 'react-redux'
 import { productFetch, productDelete } from '../../../redux/actions/product';
 import { EditOutlined, DeleteOutlined  } from '@ant-design/icons';
 import { Link, useRouteMatch  } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive'
 import queryString from 'query-string';
+
 const Products = (props) => {
   const [templateOption, setTemplateOption] = useState(true);
   const { products, pagination } = useSelector(state => state.product);
   const [ page, setPage ] = useState(1);
   const dispatch = useDispatch();
+  const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
+
   useEffect(() => {
     const { search } = props.location;
     const { page } = queryString.parse(search);
     setPage(page || 1);
+    setTemplateOption(isDesktopOrLaptop)
     dispatch(productFetch(page || 1));
   }, [])
+
+  const mobileProductsRowStyle = {
+    margin: "18px -12px 12px",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  }
 
 
   const columns = [
@@ -121,6 +133,7 @@ const Products = (props) => {
       ghost={false}
       onBack={() => window.history.back()}
       title="Product list"
+      subTitle={isDesktopOrLaptop}
       extra={[
         <Link to="/products/create">
         <Button type="primary">
