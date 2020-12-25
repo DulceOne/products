@@ -17,7 +17,7 @@ const {
   Footer,
   Sider,
 } = Layout;
-const { REACT_APP_NAME: appName, REACT_FOOTER_CONTENT: footerContent } = process.env;
+const { REACT_APP_NAME: appName, REACT_APP_FOOTER_CONTENT: footerContent } = process.env;
 
 const siderStyle = {
   position: 'fixed',
