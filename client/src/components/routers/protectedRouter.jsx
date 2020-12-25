@@ -2,46 +2,49 @@ import React from 'react';
 import {
   Switch, Router, Route,
 } from 'react-router-dom';
+import { Layout } from 'antd';
+import { useMediaQuery } from 'react-responsive';
 import RedirectRoute from './redirectRouter';
 import history from '../../utils/history';
 import ProductsComponent from '../pages/products';
 import ProductComponent from '../pages/products/components/product_edit';
 import ProductCreateComponent from '../pages/products/components/product_create';
-import { Layout, Row, Col } from 'antd';
-import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
-import { MenuComponent } from '../shared/menu';
-import { useMediaQuery } from 'react-responsive'
+import MenuComponent from '../shared/menu';
 
-const { Header, Content, Footer, Sider } = Layout;
+const {
+  Header,
+  Content,
+  Footer,
+  Sider,
+} = Layout;
 const { REACT_APP_NAME: appName, REACT_FOOTER_CONTENT: footerContent } = process.env;
 
 const siderStyle = {
-  position: "fixed",
-  height: "100%",
-  zIndex: "1",
-}
-
-const layoutStyle = {
-  height: "100%"
-}
+  position: 'fixed',
+  height: '100%',
+  zIndex: '1',
+};
 
 const ProtectedRouter = () => {
-
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
 
-  
   return (
     <Router history={history}>
-      <Layout style={{minHeight: "100vh"}}>
+      <Layout style={{ minHeight: '100vh' }}>
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
           style={isDesktopOrLaptop ? {} : siderStyle}
         >
-
-
-        <div style={{fontSize: 24, color: "white", padding: 13}}>{appName}</div>
-        <MenuComponent />
+          <div style={{
+            fontSize: 24,
+            color: 'white',
+            padding: 13,
+          }}
+          >
+            {appName}
+          </div>
+          <MenuComponent />
         </Sider>
         <Layout>
           <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
@@ -54,13 +57,13 @@ const ProtectedRouter = () => {
                 <Route exact path="/products/create" component={ProductCreateComponent} />
                 <Route exact path="/products/:productId" component={ProductComponent} />
               </Switch>
-              </div>
+            </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>{footerContent}</Footer>
         </Layout>
       </Layout>
     </Router>
-    );
-}
+  );
+};
 
 export default ProtectedRouter;

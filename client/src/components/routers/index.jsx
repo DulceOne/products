@@ -1,10 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import ProtectedRoute from './protectedRouter';
 import NotProtectedRoute from './notProtectedRouter';
 
 const Routes = () => {
-  const { token } = useSelector(state => state.user);
+  const { token } = useSelector((state) => state.user);
 
   return (
     token

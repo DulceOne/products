@@ -1,7 +1,3 @@
 import { message } from 'antd';
 
-
-export const appMessage = (msg, type) => {
-    message[type](msg);
-}
-
+export default (msg, type) => message[type](msg);

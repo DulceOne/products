@@ -1,5 +1,5 @@
 import * as http from '../../services/http.service';
-import { appMessage } from '../../components/shared/message';
+import appMessage from '../../components/shared/message';
 
 export const PRODUCTS_FETCH = 'PRODUCT[PRODUCTS_FETCH]';
 export const PRODUCTS_FETCH_SUCCESS = 'PRODUCT[PRODUCTS_FETCH_SUCCESS]';
@@ -22,18 +22,6 @@ export const PRODUCT_EDIT_FAILURE = 'PRODUCT[PRODUCT_EDIT_FAILURE]';
 export const PRODUCT_EDIT_SUCCESS = 'PRODUCT[PRODUCT_EDIT_SUCCESS]';
 
 // PRODUCT FETCH BLOCK
-export const productFetch = (page) => {
-  return dispatch => {
-    dispatch(productFetchStarted());
-    http.get(`/product?page=${page}`)
-      .then(result => dispatch(productFetchSuccess(result.data)))
-      .catch(error => {
-        const { message } = error;
-        appMessage(message, 'warn');
-        dispatch(productFetchFailure(message));
-      });
-  }
-};
 
 const productFetchStarted = () => ({
   type: PRODUCTS_FETCH,
@@ -49,24 +37,18 @@ const productFetchSuccess = (products) => ({
   payload: products,
 });
 
-// PRODUCT ADD BLOCK
+export const productFetch = (page) => (dispatch) => {
+  dispatch(productFetchStarted());
+  http.get(`/product?page=${page}`)
+    .then((result) => dispatch(productFetchSuccess(result.data)))
+    .catch((error) => {
+      const { message } = error;
+      appMessage(message, 'warn');
+      dispatch(productFetchFailure(message));
+    });
+};
 
-export const productAdd = (product) => {
-  return dispatch => {
-    dispatch(productAddStarted());
-    http.post('/product', product)
-      .then(result => {
-        const { message } = result.data;
-        appMessage(message, 'success');
-        dispatch(productAddSuccess())
-      })
-      .catch(error => {
-        const { message } = error;
-        appMessage(message, 'warn');
-        dispatch(productAddFailure(message));
-      })
-  }
-}
+// PRODUCT ADD BLOCK
 
 const productAddStarted = () => ({
   type: PRODUCT_ADD,
@@ -81,24 +63,22 @@ const productAddSuccess = () => ({
   type: PRODUCT_ADD_SUCCESS,
 });
 
+export const productAdd = (product) => (dispatch) => {
+  dispatch(productAddStarted());
+  http.post('/product', product)
+    .then((result) => {
+      const { message } = result.data;
+      appMessage(message, 'success');
+      dispatch(productAddSuccess());
+    })
+    .catch((error) => {
+      const { message } = error;
+      appMessage(message, 'warn');
+      dispatch(productAddFailure(message));
+    });
+};
+
 // PRODUCT DELETE BLOCK
-export const productDelete = (id) => {
-  return dispatch => {
-    dispatch(productDeleteStarted());
-    http.remove(`/product/${id}`)
-      .then(result => {
-        const { message } = result.data;
-        appMessage(message, 'success');
-        dispatch(productDeletSuccess());
-        dispatch(productFetch())
-      })
-      .catch(error => {
-        const { message } = error;
-        appMessage(message, 'warn');
-        dispatch(productDeletFailure(message));
-      })
-  }
-}
 
 const productDeleteStarted = () => ({
   type: PRODUCT_DELETE,
@@ -113,25 +93,26 @@ const productDeletSuccess = () => ({
   type: PRODUCT_DELETE_SUCCESS,
 });
 
+export const productDelete = (id) => (dispatch) => {
+  dispatch(productDeleteStarted());
+  http.remove(`/product/${id}`)
+    .then((result) => {
+      const { message } = result.data;
+      appMessage(message, 'success');
+      dispatch(productDeletSuccess());
+      dispatch(productFetch());
+    })
+    .catch((error) => {
+      const { message } = error;
+      appMessage(message, 'warn');
+      dispatch(productDeletFailure(message));
+    });
+};
+
 // PRODUCT GET BLOCK
-export const productGetById = (id) => {
-  return dispatch => {
-    dispatch(productGetByIdStarted());
-    http.get(`/product/${id}`)
-      .then(result => {
-        const { product } = result.data;
-        dispatch(productGetByIdSuccess(product));
-      })
-      .catch(error => {
-        const { message } = error;
-        appMessage(message, 'warn');
-        dispatch(productGetByIdFailure(message));
-      })
-  }
-}
 
 const productGetByIdStarted = () => ({
-  type: PRODUCT_GET_BY_ID
+  type: PRODUCT_GET_BY_ID,
 });
 
 const productGetByIdSuccess = (product) => ({
@@ -144,23 +125,21 @@ const productGetByIdFailure = (error) => ({
   payload: error,
 });
 
+export const productGetById = (id) => (dispatch) => {
+  dispatch(productGetByIdStarted());
+  http.get(`/product/${id}`)
+    .then((result) => {
+      const { product } = result.data;
+      dispatch(productGetByIdSuccess(product));
+    })
+    .catch((error) => {
+      const { message } = error;
+      appMessage(message, 'warn');
+      dispatch(productGetByIdFailure(message));
+    });
+};
+
 // PRODUCT EDIT BLOCK
-export const productEdit = (product, id) => {
-  return dispatch => {
-    dispatch(productEditStart(product));
-    http.patch(`/product/${id}`, product)
-      .then(result => {
-        const { message } = result.data;
-        appMessage(message, 'success');
-        dispatch(productEditSuccess());
-      })
-      .catch(error => {
-        const { message } = error;
-        appMessage(message, 'warn');
-        dispatch(productEditFailure(message));
-      })
-  }
-}
 
 const productEditStart = (product) => ({
   type: PRODUCT_EDIT,
@@ -176,3 +155,18 @@ const productEditSuccess = (product) => ({
   type: PRODUCT_EDIT_SUCCESS,
   payload: product,
 });
+
+export const productEdit = (product, id) => (dispatch) => {
+  dispatch(productEditStart(product));
+  http.patch(`/product/${id}`, product)
+    .then((result) => {
+      const { message } = result.data;
+      appMessage(message, 'success');
+      dispatch(productEditSuccess());
+    })
+    .catch((error) => {
+      const { message } = error;
+      appMessage(message, 'warn');
+      dispatch(productEditFailure(message));
+    });
+};

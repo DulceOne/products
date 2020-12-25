@@ -32,7 +32,13 @@ const productReducer = (state = initialState, action) => {
         error: action.payload,
       };
     case PRODUCTS_FETCH_SUCCESS:
-      const { products, collections, page, pages } = action.payload;
+      // eslint-disable-next-line no-case-declarations
+      const {
+        products,
+        collections,
+        page,
+        pages,
+      } = action.payload;
       return {
         ...state,
         loading: false,
