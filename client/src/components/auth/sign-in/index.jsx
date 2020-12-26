@@ -9,16 +9,8 @@ import {
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 import { signIn } from '../../../redux/actions/user';
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 8 },
-};
 
 const formWrapperStyle = {
   height: '100%',
@@ -31,6 +23,7 @@ const spinStyle = {
 const SignInComponent = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.user);
+  const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
 
   const onFinish = (values) => {
     dispatch(signIn(values));
@@ -39,7 +32,7 @@ const SignInComponent = () => {
   return (
     <Row align="middle" style={formWrapperStyle}>
       <Col span={12} offset={6}>
-        <Form layout={layout} name="basic" onFinish={onFinish}>
+        <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} name="basic" onFinish={onFinish}>
           <Form.Item
             label="Username"
             name="username"
@@ -66,7 +59,7 @@ const SignInComponent = () => {
             <Input.Password />
           </Form.Item>
 
-          <Form.Item tailLayout={tailLayout}>
+          <Form.Item wrapperCol={{ offset: isDesktopOrLaptop ? 8 : 0, span: 16 }}>
             <Button type="primary" htmlType="submit" disabled={loading}>
               Log in
             </Button>
