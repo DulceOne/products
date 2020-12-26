@@ -7,7 +7,8 @@ import {
   Col,
 } from 'antd';
 import { Link } from 'react-router-dom';
-import * as hadlers from './handlers';
+import PropTypes from 'prop-types';
+import hadlers from './handlers';
 
 const layout = {
   labelCol: { span: 8 },
@@ -22,9 +23,9 @@ const formWrapperStyle = {
   height: '100%',
 };
 
-const SignUpComponent = () => {
+const SignUpComponent = (props) => {
   const onFinish = (form) => {
-    hadlers(form);
+    hadlers(form, props.history);
   };
 
   return (
@@ -81,6 +82,14 @@ const SignUpComponent = () => {
       </Col>
     </Row>
   );
+};
+
+SignUpComponent.propTypes = {
+  history: PropTypes.arrayOf(),
+};
+
+SignUpComponent.defaultProps = {
+  history: [],
 };
 
 export default SignUpComponent;

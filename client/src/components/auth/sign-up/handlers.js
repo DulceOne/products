@@ -1,9 +1,8 @@
 import * as http from '../../../services/http.service';
 import appMessage from '../../shared/message';
-import history from '../../../utils/history';
 
-export default (form) => {
+export default (form, history) => {
   http.post('/user/signup', form)
-    .then(history.push('/sign-in'))
+    .then(() => history.push('/sign-in'))
     .catch((err) => appMessage(err.response.data.error, 'warn'));
 };
