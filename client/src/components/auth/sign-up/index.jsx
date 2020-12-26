@@ -8,22 +8,16 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
 import hadlers from './handlers';
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
-
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
 
 const formWrapperStyle = {
   height: '100%',
 };
 
 const SignUpComponent = (props) => {
+  const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
+
   const onFinish = (form) => {
     hadlers(form, props.history);
   };
@@ -31,7 +25,7 @@ const SignUpComponent = (props) => {
   return (
     <Row align="middle" style={formWrapperStyle}>
       <Col span={12} offset={6}>
-        <Form layout={layout} name="basic" onFinish={onFinish}>
+        <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} name="basic" onFinish={onFinish}>
           <Form.Item
             label="Username"
             name="username"
@@ -71,7 +65,7 @@ const SignUpComponent = (props) => {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item tailLayout={tailLayout}>
+          <Form.Item wrapperCol={{ offset: isDesktopOrLaptop ? 8 : 0, span: 16 }}>
             <Button type="primary" htmlType="submit">
               Sign up
             </Button>
