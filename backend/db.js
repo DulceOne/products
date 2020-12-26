@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const uri = process.env.DB_URI;
 
 mongoose.connect(uri, {
@@ -6,7 +7,7 @@ mongoose.connect(uri, {
   useUnifiedTopology: true,
 }).then(() => {
   console.info('Database is running');
-}).catch((e) => {
+}).catch(() => {
   console.error('Failed connect to database');
 });
 
